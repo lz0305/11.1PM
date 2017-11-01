@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <style>
+        #tab{  position: relative;  width: 500px;  margin: 50px auto;  }
+        [type="text"]{  width: 200px;  height: 35px;  margin-right: 5px;  }
+        .big{font-size: 18px;  position: absolute;  top: 8px;  left: 175px;  }
+    </style>
+</head>
+<body>
+<div id="tab">
+    <input type="text" id="text"><button class="btn btn-primary" id="btn">搜索</button>
+    <div class="glyphicon glyphicon-search big"></div>
+    <div>
+        请选择要查找的类型：
+        <select id="select1">
+            <option value="id">id</option>
+            <option value="title">title</option>
+            <option value="detail">detail</option>
+        </select>
+    </div>
+    <div id="tent">
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#btn").click(function () {
+            var what=$("#select1  option:selected").text();
+            var sea=$("#text").val();
+            console.log(what,sea);
+            $.ajax({
+                url:"http://localhost:3000",
+                type:"post",
+                data:{type:what,con:sea},
+                success:function (e) {
+                    console.log(e)
+                    if(e.length==0){
+                        alert("未找到")
+                    }else {
+                        var str="";
+                        str+=`<h2>你查找的内容是:${what}</h2>`
+                        for(i in e){
+                            str+=`<p><b>id</b>:${e[i].id} <b>title</b>:${e[i].title} <b>detail</b>:${e[i].detail}</p>`
+                        }
+                        $("#tent").html(str)
+                    }
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>
